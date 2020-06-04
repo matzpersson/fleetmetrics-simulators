@@ -1,0 +1,23 @@
+{
+  "name": "Deranji",
+  "id": "deranji",
+  "start_point": {
+    "lat": -16.45,
+    "lon": 146.02,
+    "kts": 10,
+    "depth": {
+      "min": 10,
+      "max": 15
+    }
+  },
+  "waypoints": [
+    {
+      "lat": -15.1,
+      "lon": 147.08
+    },
+    {
+      "lat": -14.1,
+      "lon": 148.08
+    }
+  ]
+}
