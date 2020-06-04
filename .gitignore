@@ -1,0 +1,15 @@
+# dependencies
+
+# testing
+**/coverage
+
+# misc
+.DS_Store
+.env
+.data
+
+*.pyc
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
