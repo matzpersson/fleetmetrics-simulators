@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulator-app
+  labels:
+    app: simulator-app
+    group: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simulator-app    # indicates which Pods (with which labeles) need be handled by this Deployment
+  template:
+    metadata:         # indicates the metadata that will be added to each Pod
+      labels:
+        app: simulator-app
+        group: db
+    spec:
+      containers:     # defines a running container inside the Pod
+        - name: simulator-app
+          image: matzpersson/fleetmetrics-simulators:<VERSION>
+          imagePullPolicy: Always
+          env:
+            - name: MQTT_PORT
+              value: "<MQTT_PORT"
+            - name: MQTT_HOST
+              value: "fleetmetrics-gateway"
+          ports:
+            - containerPort: 8081
+          # livenessProbe:
+          #   httpGet:
+          #     path: /healthz
+          #     port: 8081
+          #     httpHeaders:
+          #     - name: Custom-Header
+          #       value: Awesome
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5

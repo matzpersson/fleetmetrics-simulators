@@ -1,0 +1,42 @@
+services:
+  - docker:dind
+
+stages:
+  # - depends
+  #- test
+  - build
+  - deploy
+
+variables:
+  CONTAINER_IMAGE: matzpersson/fleetmetrics-simulators:${CI_COMMIT_SHORT_SHA}
+  CONTAINER_LATEST: matzpersson/fleetmetrics-simulators:latest
+  NAMESPACE: fleetmetrics-prod
+
+build:
+  stage: build
+  image: docker:latest
+  script:
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+    - docker build -t ${CONTAINER_IMAGE} .
+    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE}
+    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_LATEST}
+    - docker push ${CONTAINER_IMAGE}
+
+deploy:
+  stage: deploy
+  image: dtzar/helm-kubectl
+  script:
+    - kubectl config set-cluster k8s --server="${SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY_DATA}
+    - kubectl config set-credentials gitlab --token="${USER_TOKEN}"
+    - kubectl config set-context ${NAMESPACE} --cluster=k8s --user=gitlab
+    - kubectl config use-context ${NAMESPACE}
+    - sed -i "s/<VERSION>/${CI_COMMIT_SHORT_SHA}/g" deployment.yaml
+    - sed -i "s/<MQTT_PORT>/${MQTT_PORT}/g" deployment.yaml
+    - sed -i "s/<MQTT_HOST>/${MQTT_HOST}/g" deployment.yaml
+  environment:
+    name: production
+    url: https://demo.fleetmetrics.io
+  only:
+  - master
+  
