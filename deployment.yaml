@@ -22,7 +22,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: MQTT_PORT
-              value: "<MQTT_PORT"
+              value: "<MQTT_PORT>"
             - name: MQTT_HOST
               value: "fleetmetrics-gateway"
           ports:
