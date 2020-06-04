@@ -9,5 +9,4 @@ Simulates NMEA sentence traffic delivered to Gateway server broker via MQTT prot
 
 # Usage
 To start the simulator, ensure you have installed Python3.
-
 > python3 main.py
